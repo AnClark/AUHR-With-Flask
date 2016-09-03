@@ -1,0 +1,27 @@
+<!--    基本信息录入程序之主页面    -->
+
+{% extends 'info/base.html' %}
+
+{% block content %}
+    <h1>管理基本信息</h1>
+
+    <!--    方案一：普通用户也可录入    -->
+    {% if isPremiumUser == True %}
+            <a href="/info/input"><p>录入</p></a>
+            <a href="/info/query"><p>查询/修改</p></a>
+    {% elif isPremiumUser == False %}
+            <a href="/info/input"><p>录入</p></a>
+            <a href="/info/query"><p>查询</p></a>
+    {% endif %}
+
+
+    <!--    方案二：只有高级用户才能录入
+    {% if isPremiumUser == True %}
+            <a href="/info/input"><p>录入</p></a>
+            <a href="/info/query"><p>查询/修改</p></a>
+    {% elif isPremiumUser == False %}
+            <script>location.href="/info/query"</script>
+    {% endif %}
+    -->
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'login/base.html' %}
+
+{% block content %}
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-line">
+            用户名
+            {{ form.username(size=60) }}
+            <div class="form-error">
+                {% for error in form.username.errors %}
+                    <br>
+                    <span class="form-error">▲ {{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <p>
+            密码
+            {{ form.password(size=60) }}
+            <div class="form-error">
+                {% for error in form.password.errors %}
+                    <br>
+                    <span class="form-error">▲ {{ error }}</span>
+                {% endfor %}
+            </div>
+        </p>
+        <input type="submit" value="登录">
+    </form>
+{% endblock %}

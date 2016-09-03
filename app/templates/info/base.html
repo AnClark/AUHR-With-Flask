@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>基本信息 - 华中大社联人力资源管理系统</title>
+    <link rel="stylesheet" href="../../static/css/login.css">
+</head>
+<body>
+    <a href="/"><h1>华中大社联 HR 系统——Starter Edition</h1></a>
+    <p>=====================当前用户状态：
+        {% if isPremiumUser %}
+            高级用户
+        {% else %}
+            普通用户
+        {% endif %}
+    =====================</p>
+
+    <!--    【调试模式】  接收并显示 Flash 信息 -->
+
+                <ul>
+                    {% for message in get_flashed_messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+
+
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

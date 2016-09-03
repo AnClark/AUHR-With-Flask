@@ -1,0 +1,154 @@
+{% extends 'info/base.html' %}
+
+{% block content %}
+    <h1>录入数据</h1>
+
+    <form name="input_info" action="" method="post">
+        {{ form.hidden_tag() }}
+
+        <div class="form-line">
+            <span class="form-indicator">姓名</span>
+                {{ form.Name(size=80) }}
+
+                <!--    显示表单验证错误    -->
+                {% for error in form.Name.errors %}
+                    <br>
+                    <span class="form-error">▲ {{ error }}</span>
+                {% endfor %}
+
+            <br>
+        </div>
+
+        <div class="form-line">
+            <!-- “性别”处需要处理成单选按钮。为此Flask表单接口要隐藏，仅作收集前端信息用。
+                        隐藏某个表单元素，只需加入hidden属性即可，该属性不必赋值。
+            -->
+            <span class="form-indicator">性别</span>
+                {{ form.Gender(size=80, hidden=1, value='男') }}
+                <input type="radio" name="gender_select" value="男" onclick="document.getElementById('Gender').value = '男'" checked>男
+                <input type="radio" name="gender_select" value="女" onclick="document.getElementById('Gender').value = '女'">女
+
+                <!--    显示表单验证错误    -->
+                {% for error in form.Gender.errors %}
+                    <br>
+                    <span class="form-error">▲ {{ error }}</span>
+                {% endfor %}
+            <br>
+        </div>
+
+        <div class="form-line">
+            <span class="form-indicator">手机号码</span>
+                {{ form.Mobile(size=80) }}
+
+                <!--    显示表单验证错误    -->
+                {% for error in form.Mobile.errors %}
+                    <br>
+                    <span class="form-error">▲ {{ error }}</span>
+                {% endfor %}
+            <br>
+        </div>
+
+        <div class="form-line">
+            <span class="form-indicator">QQ</span>
+                {{ form.QQ(size=80) }}
+            <br>
+        </div>
+
+        <div class="form-line">
+            <span class="form-indicator">生日</span>
+                {{ form.Birthday(size=80, type='date') }}
+            <br>
+        </div>
+
+        <div class="form-line">
+            <span class="form-indicator">年级</span>
+                {{ form.Grade(size=80) }}
+
+                <!--    显示表单验证错误    -->
+                {% for error in form.Grade.errors %}
+                    <br>
+                    <span class="form-error">▲ {{ error }}</span>
+                {% endfor %}
+
+            <br>
+        </div>
+
+        <div class="form-line">
+            <span class="form-indicator">专业</span>
+                {{ form.Faculty(size=80) }}
+
+                <!--    显示表单验证错误    -->
+                {% for error in form.Faculty.errors %}
+                    <br>
+                    <span class="form-error">▲ {{ error }}</span>
+                {% endfor %}
+            <br>
+        </div>
+
+        <div class="form-line">
+            <span class="form-indicator">班级</span>
+                {{ form.Class(size=80) }}
+            <br>
+        </div>
+
+        <div class="form-line">
+            <span class="form-indicator">寝室楼栋</span>
+                {{ form.DormBuild(size=80) }}
+            <br>
+        </div>
+
+        <div class="form-line">
+            <span class="form-indicator">所在的社联部门</span>
+                {{ form.Department(size=80) }}
+
+                <!--    显示表单验证错误    -->
+                {% for error in form.Department.errors %}
+                    <br>
+                    <span class="form-error">▲ {{ error }}</span>
+                {% endfor %}
+            <br>
+        </div>
+
+        <div class="form-line">
+            <span class="form-indicator">部门内的组别</span>
+                {{ form.GroupInDepart(size=80) }}
+            <br>
+        </div>
+
+        <div class="form-line">
+            <span class="form-indicator">社联职务</span>
+                {{ form.Occupation(size=80) }}
+
+                <!--    显示表单验证错误    -->
+                {% for error in form.Occupation.errors %}
+                    <br>
+                    <span class="form-error">▲ {{ error }}</span>
+                {% endfor %}
+            <br>
+        </div>
+
+        <div class="form-line">
+            <span class="form-indicator">社联编号</span>
+                {{ form.AUID(size=80) }}
+            <br>
+        </div>
+
+        <div class="form-line">
+            <span class="form-indicator">加入社联的时间</span>
+                {{ form.ArrivalTime(size=80, type='date') }}
+
+                <!--    显示表单验证错误    -->
+                {% for error in form.ArrivalTime.errors %}
+                    <br>
+                    <span class="form-error">▲ {{ error }}</span>
+                {% endfor %}
+            <br>
+        </div>
+
+        <div>
+            <input type="submit" id="form-submit" value="提交更改" >
+        </div>
+    </form>
+
+
+{% endblock %}

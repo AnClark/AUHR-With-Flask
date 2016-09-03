@@ -1,0 +1,30 @@
+body
+{
+    font-family: 'Microsoft YaHei UI','微软雅黑','Arial';
+}
+
+a:link { text-decoration: none;color: blue}
+　　 a:active { text-decoration:blink}
+　　 a:hover { text-decoration:underline;color: red}
+　　 a:visited { text-decoration: none;color: green}
+
+.form-error
+{
+    color:red;
+    font-size:15px;
+    margin-left: 100px;
+}
+
+.form-indicator
+{
+	padding:8px 10px 8px 10px;
+    width: 200px;
+}
+
+.flash-message
+{
+    color:red;
+    border-style: solid;
+    border-width: 2px;
+    padding:10px 10px 10px 10px;
+}
