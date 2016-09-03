@@ -15,10 +15,17 @@ from .forms import InputBasicInfoForm
 Premium_User_Switch = False
 
 
+""" ####################################### 登 录 管 理 部 分 #######################################"""
+
+
 @app.before_request
 def before_request():
+    # 全局用户名，在用户登录后指派于此，可为生命周期内所有页面共享
     g.user = current_user
-
+    #   用户权限开关
+    #   指示HR系统是否在高级用户状态下运行。
+    #   运用高级用户登录，就可以解锁信息录入、信息修改、信息删除等高级功能。否则，只能进行信息查询。
+    g.Premium_User_Switch = False
 
 #   从数据库中加载HR用户信息
 @lm.user_loader
@@ -59,7 +66,7 @@ def login():
 
         #   登录
         # 【警告！】当填入用户数据库中不存在的用户名时，如果不验证并拦截，就会触发异常！
-        login_user(user=userinfo_loginer, remember=True)
+        login_user(user=userinfo_loginer, remember=form.remember_me.data)
 
         # For debug
         flash("当前你输入的登录信息——用户名：%s；密码：%s" % (input_username, input_password))
@@ -69,40 +76,66 @@ def login():
     return render_template('login/login.html', form=form)
 
 
+#   登出页面
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+"""#########################################################################################################"""
+
+
+"""###################################### 基 本 信 息 管 理 部 分 ##########################################
+        整个基本信息管理系统的核心，汇聚于此。
+        所有页面都设置了@login_required装饰器，只允许登录后才能访问。
+"""
+
+
 #   基本信息录入程序之主页
 @app.route('/info')
+@login_required
 def info():
-    return render_template('info/index.html', isPremiumUser=Premium_User_Switch)
+    user = g.user
+    return render_template('info/index.html', user=user, isPremiumUser=Premium_User_Switch)
 
 
 #   基本信息录入页面
 @app.route('/info/input', methods=['GET', 'POST'])
+@login_required
 def info_input():
+    user = g.user
+
     form = InputBasicInfoForm()
     if form.validate_on_submit():
         #   <测试过程> 打印出表单提交的结果
         flash_form_submit(form)
         return redirect('/info/input')
 
-    return render_template('info/input.html', isPremiumUser=Premium_User_Switch, form=form)
+    return render_template('info/input.html', user=user, isPremiumUser=Premium_User_Switch, form=form)
 
 
 #   查询入口页面
 #   在入口页面中，可以直接以关键字或部门分类进行查询（没有必要再去做二级页面）
 @app.route('/info/query')
+@login_required
 def info_query():
-    return render_template('info/query.html', isPremiumUser=Premium_User_Switch)
+    user = g.user
+
+    return render_template('info/query.html', user=user, isPremiumUser=Premium_User_Switch)
 
 
 #   查询结果集页面
 #   查询结果显示在这里。
 #   点击条目，即可以页面内弹窗的形式，展示单人信息报表
 @app.route('/info/query_result')
+@login_required
 def info_query_result():
-    return render_template('info/query_result.html', isPremiumUser=Premium_User_Switch)
+    user = g.user
+    return render_template('info/query_result.html', user=user, isPremiumUser=Premium_User_Switch)
 
 
-#<测试过程> 以flash模式输出表单提交的内容
+# <测试过程>
+# 以flash模式输出表单提交的内容
 def flash_form_submit(form):
     flash_str = """【刚才你提交的表单信息如下】
         姓名：%s
@@ -133,5 +166,5 @@ def flash_form_submit(form):
              form.Occupation.data,
              form.AUID.data,
              form.ArrivalTime.data)
-    #flash(flash_str)
-    print(flash_str)
+    flash(flash_str)
+

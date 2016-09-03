@@ -3,7 +3,7 @@
 """ 《《表单定义文件》》"""
 
 from flask_wtf import Form
-from wtforms.fields import StringField, DateField, PasswordField
+from wtforms.fields import StringField, DateField, PasswordField, BooleanField
 from wtforms.validators import DataRequired, Length
 
 
@@ -27,3 +27,4 @@ class InputBasicInfoForm(Form):
 class LoginForm(Form):
     username = StringField('username', validators=[Length(min=5, max=64), DataRequired("请输入用户名！")])
     password = PasswordField('password', validators=[Length(min=5, max=64), DataRequired("请输入密码！")])
+    remember_me = BooleanField('remember_me')

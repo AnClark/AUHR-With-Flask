@@ -3,8 +3,10 @@
 """ 《《《数据模型定义文件》》》  """
 
 from app import db
-# UserMixIn：用户模型可选之类库。引入旨在防止调用login_user函数时出错。
+# UserMixIn：用户模型可选之类库。引入旨在防止调用login_user函数时出错，
+#   并通过展示成员函数重载关系，提高代码可读性。
 from flask_login import UserMixin
+
 
 class Member(db.Model):
     """ 【社联人力资源核心表——人员信息表】
