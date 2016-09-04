@@ -8,7 +8,7 @@ from .models import Member, Admin
 
 from .forms import LoginForm, InputBasicInfoForm
 
-import exceptions
+import string
 
 #   引入 Passlib 加密模块
 from passlib.hash import sha256_crypt
@@ -35,14 +35,17 @@ def load_user(id):
 
 
 #   站点主入口。
-#   直接进入登录页面
+#   先判断用户是否已登录。
+#       若已登录，则直接跳到主菜单页面（目前只编写基本信息管理页面，因此暂定调到基本信息管理的主菜单）
+#       若未登录，则跳到登录页面
 #   【友情提示】和Java类似，Python的对象允许先使用后定义！
 @app.route('/')
 @app.route('/index')
-@login_required
 def index():
-        return redirect(url_for('info'))
-
+        if string.find(str(current_user), "Anonymous") > 0:
+            return redirect(url_for('login'))
+        else:
+            return redirect(url_for('info'))
 
 
 #   登录页面
@@ -53,6 +56,7 @@ def login():
         # 测试期间，登录成功页面暂时指向基本信息管理页面
         return redirect('/info')
     """
+
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -103,6 +107,8 @@ def login():
 
         # 登录通过，即进入主页面。
         # 主页面未建立，因此暂时以基本信息管理部分做之
+
+
         return redirect(url_for('info'))
         # return render_template('login/login.html', form=form)
 
