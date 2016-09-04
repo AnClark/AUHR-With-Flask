@@ -4,10 +4,11 @@ from flask import render_template, redirect, session, url_for, request, g
 from flask_login import login_user, logout_user, current_user, login_required
 from flask import flash
 
-# from .models import Admin
+from .models import Member, Admin
 
-from .forms import LoginForm
-from .forms import InputBasicInfoForm
+from .forms import LoginForm, InputBasicInfoForm
+
+import exceptions
 
 #   引入 Passlib 加密模块
 from passlib.hash import sha256_crypt
@@ -138,6 +139,32 @@ def info_input():
     if form.validate_on_submit():
         #   <测试过程> 打印出表单提交的结果
         flash_form_submit(form)
+
+        new_person = Member(
+            Name=form.Name.data,
+            Gender=form.Gender.data,
+            Mobile=form.Mobile.data,
+            QQ=form.QQ.data,
+            Birthday=form.Birthday.data,
+            Grade=form.Grade.data,
+            Faculty=form.Faculty.data,
+            Class=form.Class.data,
+            DormBuild=form.DormBuild.data,
+            Department=form.Department.data,
+            GroupInDepart=form.GroupInDepart.data,
+            Occupation=form.Occupation.data,
+            AUID=form.AUID.data,
+            ArrivalTime=form.ArrivalTime.data
+        )
+
+        try:
+            db.session.add(new_person)
+            db.session.commit()
+        except Exception, msg:
+            flash("系统出错：%s" % msg)
+        else:
+            flash("成功添加信息：%s" % form.Name.data)
+
         return redirect('/info/input')
 
     return render_template('info/input.html', user=user, isPremiumUser=Premium_User_Switch, form=form)
@@ -182,7 +209,7 @@ def flash_form_submit(form):
         社联编号：%s
         入社联时间：%s
     """ % (form.Name.data,
-             form.Gender.data,
+            form.Gender.data,
              form.Mobile.data,
              form.QQ.data,
              form.Birthday.data,

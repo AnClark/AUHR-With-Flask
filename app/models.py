@@ -60,12 +60,7 @@ class Admin(db.Model, UserMixin):
 
     def __repr__(self):
         return '<User %r>' % (self.username)
-        """        return str({
-            'username': self.username,
-            'password': self.password,
-            'nickname': self.nickname,
-            'isPremiumUser': self.isPremiumUser
-        })"""
+
 
 
 
