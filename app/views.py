@@ -16,7 +16,7 @@ from passlib.hash import sha256_crypt
 #   用户权限开关
 #   指示HR系统是否在高级用户状态下运行。
 #   运用高级用户登录，就可以解锁信息录入、信息修改、信息删除等高级功能。否则，只能进行信息查询。
-Premium_User_Switch = False
+# session['Premium_User_Switch'] = False
 
 
 """ ####################################### 登 录 管 理 部 分 #######################################"""
@@ -26,10 +26,7 @@ Premium_User_Switch = False
 def before_request():
     # 全局用户名，在用户登录后指派于此，可为生命周期内所有页面共享
     g.user = current_user
-    #   用户权限开关
-    #   指示HR系统是否在高级用户状态下运行。
-    #   运用高级用户登录，就可以解锁信息录入、信息修改、信息删除等高级功能。否则，只能进行信息查询。
-    g.Premium_User_Switch = False
+
 
 #   从数据库中加载HR用户信息
 @lm.user_loader
@@ -42,8 +39,10 @@ def load_user(id):
 #   【友情提示】和Java类似，Python的对象允许先使用后定义！
 @app.route('/')
 @app.route('/index')
+@login_required
 def index():
-    return redirect(url_for('login'))
+        return redirect(url_for('info'))
+
 
 
 #   登录页面
@@ -89,12 +88,16 @@ def login():
             # flash("Queried password is: %s \n Your inputed password is: %s" % (password_char, input_password))
             return render_template('login/login.html', form=form)
 
+        #   检测用户级别
+        session['Premium_User_Switch'] = db.session.query(models.Admin.isPremiumUser).filter_by(username=input_username).all()[0][0]
+        flash("高级用户与否：%s" % session['Premium_User_Switch'])
+
         #   登录
         # 【警告！】当填入用户数据库中不存在的用户名时，如果不验证并拦截，就会触发异常！
         login_user(user=userinfo_loginer, remember=form.remember_me.data)
 
         # For debug
-        #if g.user:
+        # if g.user:
         #    flash("登陆成功！服务器用户名：%s" % g.user.username)
         # flash("当前你输入的登录信息——用户名：%s；密码：%s" % (input_username, input_password))
 
@@ -110,7 +113,7 @@ def login():
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('login'))
 
 """#########################################################################################################"""
 
@@ -126,7 +129,7 @@ def logout():
 @login_required
 def info():
     user = g.user
-    return render_template('info/index.html', user=user, isPremiumUser=Premium_User_Switch)
+    return render_template('info/index.html', user=user, isPremiumUser=session['Premium_User_Switch'])
 
 
 #   基本信息录入页面
@@ -167,7 +170,7 @@ def info_input():
 
         return redirect('/info/input')
 
-    return render_template('info/input.html', user=user, isPremiumUser=Premium_User_Switch, form=form)
+    return render_template('info/input.html', user=user, isPremiumUser=session['Premium_User_Switch'], form=form)
 
 
 #   查询入口页面
@@ -177,7 +180,7 @@ def info_input():
 def info_query():
     user = g.user
 
-    return render_template('info/query.html', user=user, isPremiumUser=Premium_User_Switch)
+    return render_template('info/query.html', user=user, isPremiumUser=session['Premium_User_Switch'])
 
 
 #   查询结果集页面
