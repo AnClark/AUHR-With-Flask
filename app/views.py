@@ -4,10 +4,13 @@ from flask import render_template, redirect, session, url_for, request, g
 from flask_login import login_user, logout_user, current_user, login_required
 from flask import flash
 
-from .models import Admin
+# from .models import Admin
 
 from .forms import LoginForm
 from .forms import InputBasicInfoForm
+
+#   引入 Passlib 加密模块
+from passlib.hash import sha256_crypt
 
 #   用户权限开关
 #   指示HR系统是否在高级用户状态下运行。
@@ -60,8 +63,29 @@ def login():
         userinfo_loginer = models.Admin.query.filter_by(username=input_username).first()
 
         # 检测用户名是否存在
-        if(userinfo_loginer == None):
+        if userinfo_loginer == None:
             form.username.errors.append("用户名不存在！")  # 直接将错误信息附加到表单验证器的错误列表中
+            return render_template('login/login.html', form=form)
+
+        # ============  密码验证过程  =============
+        """从数据库中读取sha256加密后的密码字串
+            和 PHP 类似，运行查询函数后获取到的对象并不是字符串，而是与资源有关的各种对象。
+            操作备忘录：
+            ① 执行 session.query(字段对象) 函数后：生成一个list，成员为按照字段筛选后的 SQLAlchemy 数据元组
+            ② 由于我设置了用户名唯一，因此正常情况下，list中只有一个数据元组。
+            ③ 元组的第一个元素即为查询而得的密码字串，但这是以SQLAlchemy数据串的方式存储的（字母u开头的字符串）。
+                因此，必须使用str()函数，将它转换为字符串，方可得到我们需要的密码字串。
+         """
+
+        password_char = db.session.query(models.Admin.password).filter_by(username=str(input_username)).all()[0]
+        password_char = str(password_char[0])
+        #if(sha256_crypt.verify(input_password, password_char)):
+
+        if input_password == password_char:
+            pass
+        else:
+            form.password.errors.append("密码错误！")
+            # flash("Queried password is: %s \n Your inputed password is: %s" % (password_char, input_password))
             return render_template('login/login.html', form=form)
 
         #   登录
@@ -69,9 +93,14 @@ def login():
         login_user(user=userinfo_loginer, remember=form.remember_me.data)
 
         # For debug
-        flash("当前你输入的登录信息——用户名：%s；密码：%s" % (input_username, input_password))
+        #if g.user:
+        #    flash("登陆成功！服务器用户名：%s" % g.user.username)
+        # flash("当前你输入的登录信息——用户名：%s；密码：%s" % (input_username, input_password))
 
-        return render_template('login/login.html', form=form)
+        # 登录通过，即进入主页面。
+        # 主页面未建立，因此暂时以基本信息管理部分做之
+        return redirect(url_for('info'))
+        # return render_template('login/login.html', form=form)
 
     return render_template('login/login.html', form=form)
 
