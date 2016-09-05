@@ -31,7 +31,7 @@ class Member(db.Model):
     ArrivalTime = db.Column(db.Date, index=True)
 
     def __repr__(self):
-        return '<User %r>' % (self.Name)
+        return '<Name %r>' % (self.Name)
 
 
 class Admin(db.Model, UserMixin):

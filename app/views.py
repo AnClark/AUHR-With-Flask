@@ -5,8 +5,9 @@ from flask_login import login_user, logout_user, current_user, login_required
 from flask import flash
 
 from .models import Member, Admin
+from .querier import MemberQuerier
 
-from .forms import LoginForm, InputBasicInfoForm
+from .forms import LoginForm, InputBasicInfoForm, KeyWordQueryForm
 
 import string
 
@@ -146,8 +147,6 @@ def info_input():
 
     form = InputBasicInfoForm()
     if form.validate_on_submit():
-        #   <测试过程> 打印出表单提交的结果
-        flash_form_submit(form)
 
         new_person = Member(
             Name=form.Name.data,
@@ -185,51 +184,22 @@ def info_input():
 @login_required
 def info_query():
     user = g.user
+    keyword_query_form = KeyWordQueryForm
 
-    return render_template('info/query.html', user=user, isPremiumUser=session['Premium_User_Switch'])
+    if keyword_query_form.validate_on_submit():
+        keyword = keyword_query_form.KeyWord.data
+
+    return render_template('info/query.html', user=user, isPremiumUser=session['Premium_User_Switch'],
+                           keyword_query_form=keyword_query_form)
 
 
 #   查询结果集页面
 #   查询结果显示在这里。
 #   点击条目，即可以页面内弹窗的形式，展示单人信息报表
+#   在页面内，还可以再以关键字和部门分类进行查询
 @app.route('/info/query_result')
 @login_required
 def info_query_result():
     user = g.user
-    return render_template('info/query_result.html', user=user, isPremiumUser=Premium_User_Switch)
-
-
-# <测试过程>
-# 以flash模式输出表单提交的内容
-def flash_form_submit(form):
-    flash_str = """【刚才你提交的表单信息如下】
-        姓名：%s
-        性别：%s
-        手机号码：%s
-        QQ：%s
-        生日：%s
-        年级：%s
-        专业：%s
-        班级：%s
-        寝室楼栋：%s
-        所在部门：%s
-        部门内组别：%s
-        社联职务：%s
-        社联编号：%s
-        入社联时间：%s
-    """ % (form.Name.data,
-            form.Gender.data,
-             form.Mobile.data,
-             form.QQ.data,
-             form.Birthday.data,
-             form.Grade.data,
-             form.Faculty.data,
-             form.Class.data,
-             form.DormBuild.data,
-             form.Department.data,
-             form.GroupInDepart.data,
-             form.Occupation.data,
-             form.AUID.data,
-             form.ArrivalTime.data)
-    flash(flash_str)
+    return render_template('info/query_result.html', user=user, isPremiumUser=session['Premium_User_Switch'])
 

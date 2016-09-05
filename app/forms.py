@@ -28,3 +28,9 @@ class LoginForm(Form):
     username = StringField('username', validators=[Length(min=5, max=64), DataRequired("请输入用户名！")])
     password = PasswordField('password', validators=[Length(min=5, max=64), DataRequired("请输入密码！")])
     remember_me = BooleanField('remember_me')
+
+
+class KeyWordQueryForm(Form):
+    KeyWord = StringField('KeyWord', validators=[DataRequired("要检索资料，请输入关键字。。。")])
+
+
