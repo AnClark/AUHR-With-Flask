@@ -28,3 +28,25 @@ a:link { text-decoration: none;color: blue}
     border-width: 2px;
     padding:10px 10px 10px 10px;
 }
+
+.query-header
+{
+    position:relative;
+    width: 80%;
+    background-color: navajowhite;
+    padding: 15px 30px;
+
+    margin-bottom: 20px;
+}
+
+.query-header-column
+{
+    position:relative;
+    width: 50%;
+    float: left;
+}
+
+.query-header-clear
+{
+    clear: both;
+}

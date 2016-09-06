@@ -1,18 +1,19 @@
 {% extends 'info/base.html' %}
 
 {% block content %}
-    {% if isPremiumUser == True %}
-        <h1>查询、管理记录</h1>
-    {% else %}
-        <h1>查询记录</h1>
-    {% endif %}
-
     <script>
         function start_query(){
             var keyword = document.getElementById("keyword").value;
             location.href="/info/query_result?key=" + keyword;
         }
     </script>
+
+    {% if isPremiumUser == True %}
+        <h1>查询、管理记录</h1>
+    {% else %}
+        <h1>查询记录</h1>
+    {% endif %}
+
 
     <h2>查询方式：</h2> <br>
 

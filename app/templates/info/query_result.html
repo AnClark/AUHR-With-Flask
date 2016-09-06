@@ -1,9 +1,31 @@
 {% extends 'info/base.html' %}
 
 {% block content %}
-    <h1>关键字查询</h1>
+    <script>
+        function start_query(){
+            //TODO: 后期考虑用AJAX实现结果页内的搜索
+            var keyword = document.getElementById("keyword").value;
+            location.href="/info/query_result?key=" + keyword;
+        }
+    </script>
+
 
     <!--  TODO:前置工具栏  -->
+    <div class="query-header">
+        <div class="query-header-column">
+            <span style="font-size: 30px">关键字查询</span>
+        </div>
+        <div class="query-header-column">
+
+            <div id="searchbar">
+                <span>关键字：</span>
+                <input type="text" id="keyword">
+                <input type="button" id="start-query" value="查询" onclick="start_query()">
+            </div>
+
+        </div>
+        <div class="query-header-clear"></div>
+    </div>
 
     <div class="result-container">
         <!--    TODO:打印表头    -->
