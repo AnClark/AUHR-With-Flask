@@ -1,10 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'info/base.html' %}
 
-</body>
-</html>
+{% block content %}
+    <h1>关键字查询</h1>
+
+    <!--  TODO:前置工具栏  -->
+
+    <div class="result-container">
+        <!--    TODO:打印表头    -->
+
+        <!--    打印出检索到的成员信息     -->
+        {% if result_assembly == False %}
+            <h2>未查询到关键字：{{ keyword }}</h2>
+        {% else %}
+            <div class="result-table">
+                {% for result in result_assembly %}
+                    <div id="member-{{ result_assembly['Name'] }}" class="result-table-line" onclick="//TODO:单击后弹窗显示成员信息">
+                            {% for column in result %}
+                                {{ column }}，
+                            {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    </div>
+{% endblock %}

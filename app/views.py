@@ -5,7 +5,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from flask import flash
 
 from .models import Member, Admin
-from .querier import MemberQuerier
+from .querier import MemberQuerier, department_list
 
 from .forms import LoginForm, InputBasicInfoForm, KeyWordQueryForm
 
@@ -180,26 +180,38 @@ def info_input():
 
 #   查询入口页面
 #   在入口页面中，可以直接以关键字或部门分类进行查询（没有必要再去做二级页面）
+#   查询过程直接在页面中借助 JavaScript 进行。
 @app.route('/info/query')
 @login_required
 def info_query():
     user = g.user
-    keyword_query_form = KeyWordQueryForm
-
-    if keyword_query_form.validate_on_submit():
-        keyword = keyword_query_form.KeyWord.data
-
     return render_template('info/query.html', user=user, isPremiumUser=session['Premium_User_Switch'],
-                           keyword_query_form=keyword_query_form)
+                           department_list=department_list)
 
 
 #   查询结果集页面
 #   查询结果显示在这里。
-#   点击条目，即可以页面内弹窗的形式，展示单人信息报表
+#   点击条目，即可以以页面内弹窗的形式，展示单人信息报表
 #   在页面内，还可以再以关键字和部门分类进行查询
 @app.route('/info/query_result')
 @login_required
 def info_query_result():
     user = g.user
-    return render_template('info/query_result.html', user=user, isPremiumUser=session['Premium_User_Switch'])
 
+    keyword = request.args['key']
+    result_assembly = MemberQuerier(keyword=keyword)
+
+    return render_template('info/query_result.html', user=user, isPremiumUser=session['Premium_User_Switch'],
+                           result_assembly=result_assembly)
+
+
+@app.route('/req')
+def req():
+    # return request.method
+    # return str(request.args['azaz'])
+    return request.args['key']
+
+
+@app.route('/call')
+def call():
+    return redirect(unicode('/req?key=华中科技大学 学生社团联合会 思存工作室'))

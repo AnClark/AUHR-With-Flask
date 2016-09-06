@@ -1,10 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'info/base.html' %}
 
-</body>
-</html>
+{% block content %}
+    {% if isPremiumUser == True %}
+        <h1>查询、管理记录</h1>
+    {% else %}
+        <h1>查询记录</h1>
+    {% endif %}
+
+    <script>
+        function start_query(){
+            var keyword = document.getElementById("keyword").value;
+            location.href="/info/query_result?key=" + keyword;
+        }
+    </script>
+
+    <h2>查询方式：</h2> <br>
+
+    <div id="query-by-keyword">
+        <p>按关键字查询</p>
+
+            <span>输入查询关键字：</span>
+            <input type="text" id="keyword">
+
+            <input type="button" id="start-query" value="查询" onclick="start_query()">
+        </form>
+    </div>
+
+    <div id="query-by-department">
+        <p>按部门查询</p>
+
+    </div>
+
+{% endblock %}
