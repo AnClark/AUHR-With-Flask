@@ -44,42 +44,8 @@ def MemberQuerier(keyword):
     else:
         return False
 
+"""[[ The following functions are made FOR DEBUG ]]"""
 
-    """
-def MemberQuerier(keyword):
-    result_dict_assembly = []
-    members = db.session.query(
-        Member.id,
-        Member.Name,
-        Member.Gender,
-        Member.Mobile,
-        Member.QQ,
-        Member.Birthday,
-        Member.Grade,
-        Member.Faculty,
-        Member.Class,
-        Member.DormBuild,
-        Member.Department,
-        Member.GroupInDepart,
-        Member.Occupation,
-        Member.AUID,
-        Member.ArrivalTime
-    ).all()
-
-    for member in members:
-        str_for_cmp = ""
-        for column in member:
-            str_for_cmp = str_for_cmp + str(column) + ","
-
-        if string.find(str_for_cmp, keyword) >= 0:
-            result_assembly.append(member)
-            print("***  FOUND One!")
-
-    if result_dict_assembly:
-        return result_dict_assembly
-    else:
-        return False
-"""
 
 def querydbg(keyword):
         result_dict_assembly = []
