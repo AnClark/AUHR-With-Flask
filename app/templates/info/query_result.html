@@ -1,6 +1,8 @@
 {% extends 'info/base.html' %}
 
 {% block content %}
+    <!--    引入弹出窗口控制程序  -->
+    <script src="{{ url_for('static', filename='js/popwindow.js') }}"></script>
     <script>
         function start_query(){
             //TODO: 后期考虑用AJAX实现结果页内的搜索
@@ -45,5 +47,14 @@
             </div>
         {% endif %}
 
+    </div>
+
+    <!--    人员详细信息的弹出窗口 -->
+    <div class="background-shade" id="shader" onclick="hide_popup_window()"></div>
+    <div class="popup-window" id="popup-window">
+        <div class="popup-window-title">
+            <span>弹出窗口</span>
+            <span class="close-button" onclick="hide_popup_window()">[关闭]</span>
+        </div>
     </div>
 {% endblock %}
