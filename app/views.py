@@ -175,7 +175,8 @@ def info_input():
 
         return redirect('/info/input')
 
-    return render_template('info/input.html', user=user, isPremiumUser=session['Premium_User_Switch'], form=form)
+    return render_template('info/input.html', user=user, isPremiumUser=session['Premium_User_Switch'],
+                           form=form)
 
 
 #   查询入口页面
@@ -203,6 +204,24 @@ def info_query_result():
 
     return render_template('info/query_result.html', user=user, isPremiumUser=session['Premium_User_Switch'],
                            result_assembly=result_assembly)
+
+
+#   个人信息报表页面
+#   在查询结果页中以“弹窗内嵌iframe”的形式展示
+#   根据唯一关键字——数据表的唯一ID，来检索成员信息，得到唯一的结果
+@app.route('/info/query_person')
+@login_required
+def info_query_person():
+    user = g.user
+
+    unique_key = request.args['unique-key']
+    result_assembly = MemberQuerier(unique_key)
+
+    return render_template('info/query_person.html', user=user, isPremiumUser=session['Premium_User_Switch'],
+                           result_assembly=result_assembly)
+
+
+
 
 
 @app.route('/req')

@@ -36,9 +36,9 @@
         {% else %}
             <div class="result-table">
                 {% for result in result_assembly %}
-                    <div id="member-{{ result_assembly['Name'] }}" class="result-table-line" onclick="//TODO:单击后弹窗显示成员信息">
-                            {% for column in result %}
-                                {{ column }}，
+                    <div id="member-{{ result['Name'] }}" class="result-table-line" onclick="//TODO:单击后弹窗显示成员信息">
+                            {% for value in result.values() %}
+                                {{ value }}，
                             {% endfor %}
                     </div>
                 {% endfor %}

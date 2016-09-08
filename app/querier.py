@@ -22,9 +22,34 @@ department_list = (
     "文艺拓展部"
 )
 
+
 def MemberQuerier(keyword):
-    result_assembly = []
+    result_dict_assembly = []
+    members = db.session.query(Member).all()
+
+    for item in members:
+        member = item.__dict__
+        del member['_sa_instance_state']        # 删去字典中的系统元素，只留下条目
+
+        str_for_cmp = ""
+        for value in member.values():
+            str_for_cmp = str_for_cmp + str(value) + ","
+
+        if string.find(str_for_cmp, keyword) >= 0:
+            result_dict_assembly.append(member)
+            print("***  FOUND One!")
+
+    if result_dict_assembly:
+        return result_dict_assembly
+    else:
+        return False
+
+
+    """
+def MemberQuerier(keyword):
+    result_dict_assembly = []
     members = db.session.query(
+        Member.id,
         Member.Name,
         Member.Gender,
         Member.Mobile,
@@ -45,21 +70,29 @@ def MemberQuerier(keyword):
         str_for_cmp = ""
         for column in member:
             str_for_cmp = str_for_cmp + str(column) + ","
-        # print(str_for_cmp)
 
         if string.find(str_for_cmp, keyword) >= 0:
             result_assembly.append(member)
             print("***  FOUND One!")
 
-    if result_assembly:
-        return result_assembly
+    if result_dict_assembly:
+        return result_dict_assembly
     else:
         return False
+"""
+
+def querydbg(keyword):
+        result_dict_assembly = []
+        members = db.session.query(Member).all()
+
+        for member in members:
+            print(member.__dict__)
 
 
 # FOR DEBUG
 def print_all():
         members = db.session.query(
+            Member.id,
             Member.Name,
             Member.Gender,
             Member.Mobile,
