@@ -5,7 +5,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from flask import flash
 
 from .models import Member, Admin
-from .querier import MemberQuerier, department_list
+from .querier import MemberQuerier, MemberQuerierById, department_list
 
 from .forms import LoginForm, InputBasicInfoForm, KeyWordQueryForm
 
@@ -214,16 +214,15 @@ def info_query_result():
 def info_query_person():
     user = g.user
 
-    unique_key = request.args['unique-key']
-    result_assembly = MemberQuerier(unique_key)
+    idx = int(request.args['idx'])
+
+    result_assembly = MemberQuerierById(idx)[0]
 
     return render_template('info/query_person.html', user=user, isPremiumUser=session['Premium_User_Switch'],
                            result_assembly=result_assembly)
 
 
-
-
-
+# FOR DEBUG
 @app.route('/req')
 def req():
     # return request.method

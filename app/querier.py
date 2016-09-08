@@ -44,6 +44,24 @@ def MemberQuerier(keyword):
     else:
         return False
 
+
+def MemberQuerierById(idx):
+    result_dict_assembly = []
+    members = db.session.query(Member).all()
+
+    for item in members:
+        member = item.__dict__
+        del member['_sa_instance_state']        # 删去字典中的系统元素，只留下条目
+
+        if member['id'] == idx:
+            result_dict_assembly.append(member)
+            break
+
+    if result_dict_assembly:
+        return result_dict_assembly
+    else:
+        return False
+
 """[[ The following functions are made FOR DEBUG ]]"""
 
 

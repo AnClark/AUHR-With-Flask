@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>个人信息 - 华中大社联人力资源管理系统</title>
+    
 </head>
 <body>
     <div class="person-header">
@@ -13,8 +14,74 @@
 
         <div class="personinfo-line">
             <span>姓名</span>
+            {{ result_assembly['Name'] }}
         </div>
 
+        <div class="personinfo-line">
+            <span>所在部门</span>
+            {{ result_assembly['Department'] }}
+        </div>
+        
+        <div class="personinfo-line">
+            <span>部门内分组</span>
+            {{ result_assembly['GroupInDepart'] }}
+        </div>
+        
+        <div class="personinfo-line">
+            <span>职务</span>
+            {{ result_assembly['Occupation'] }}
+        </div>
+        
+        <div class="personinfo-line">
+            <span>性别</span>
+            {{ result_assembly['Gender'] }}
+        </div>
+        
+        <div class="personinfo-line">
+            <span>手机号</span>
+            {{ result_assembly['Mobile'] }}
+        </div>
+        
+        <div class="personinfo-line">
+            <span>QQ</span>
+            {{ result_assembly['QQ'] }}
+        </div>
+
+        <div class="personinfo-line">
+            <span>生日</span>
+            {{ result_assembly['Birthday'] }}
+        </div>
+        
+        <div class="personinfo-line">
+            <span>年级</span>
+            {{ result_assembly['Grade'] }}
+        </div>
+        
+        <div class="personinfo-line">
+            <span>专业</span>
+            {{ result_assembly['Faculty'] }}
+        </div>
+        
+        <div class="personinfo-line">
+            <span>班级</span>
+            {{ result_assembly['Class'] }}
+        </div>
+        
+        <div class="personinfo-line">
+            <span>寝室楼栋</span>
+            {{ result_assembly['DormBuild'] }}
+        </div>
+        
+        <div class="personinfo-line">
+            <span>社联编号</span>
+            {{ result_assembly['AUID'] }}
+        </div>
+        
+        <div class="personinfo-line">
+            <span>进入社联的时间</span>
+            {{ result_assembly['ArrivalTime'] }}
+        </div>
+        
     </div>
 
 </body>
