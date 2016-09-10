@@ -6,83 +6,241 @@
     
 </head>
 <body>
+    <!--    【调试模式】  接收并显示 Flash 信息 -->
+
+                <ul>
+                    {% for message in get_flashed_messages() %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+
+
     <div class="person-header">
-        <p>成员信息</p>
-    </div>
-
-    <div class="personinfo-container">
-
-        <div class="personinfo-line">
-            <span>姓名</span>
-            {{ result_assembly['Name'] }}
+            <p>成员信息</p>
         </div>
 
-        <div class="personinfo-line">
-            <span>所在部门</span>
-            {{ result_assembly['Department'] }}
-        </div>
-        
-        <div class="personinfo-line">
-            <span>部门内分组</span>
-            {{ result_assembly['GroupInDepart'] }}
-        </div>
-        
-        <div class="personinfo-line">
-            <span>职务</span>
-            {{ result_assembly['Occupation'] }}
-        </div>
-        
-        <div class="personinfo-line">
-            <span>性别</span>
-            {{ result_assembly['Gender'] }}
-        </div>
-        
-        <div class="personinfo-line">
-            <span>手机号</span>
-            {{ result_assembly['Mobile'] }}
-        </div>
-        
-        <div class="personinfo-line">
-            <span>QQ</span>
-            {{ result_assembly['QQ'] }}
-        </div>
+    {% if isPremiumUser == True %}
+            <form name="modify_person_info" action="" method="post">
+                {{ form.hidden_tag() }}
 
-        <div class="personinfo-line">
-            <span>生日</span>
-            {{ result_assembly['Birthday'] }}
+                <div class="form-line">
+                    <span class="form-indicator">姓名</span>
+                        {{ form.Name(value=member_for_edit.Name, size=80) }}
+
+                        <!--    显示表单验证错误    -->
+                        {% for error in form.Name.errors %}
+                            <br>
+                            <span class="form-error">▲ {{ error }}</span>
+                        {% endfor %}
+
+                    <br>
+                </div>
+
+                <div class="form-line">
+                    <!-- “性别”处需要处理成单选按钮。为此Flask表单接口要隐藏，仅作收集前端信息用。
+                                隐藏某个表单元素，只需加入hidden属性即可，该属性不必赋值。
+                    -->
+                    <span class="form-indicator">性别</span>
+                        {{ form.Gender(value=member_for_edit.Gender, size=80, hidden=1) }}
+                        <input type="radio" name="gender_select" value="男" onclick="document.getElementById('Gender').value = '男'" {{ gender_checked_param['Male'] }}>男
+                        <input type="radio" name="gender_select" value="女" onclick="document.getElementById('Gender').value = '女'" {{ gender_checked_param['Female'] }}>女
+
+                        <!--    显示表单验证错误    -->
+                        {% for error in form.Gender.errors %}
+                            <br>
+                            <span class="form-error">▲ {{ error }}</span>
+                        {% endfor %}
+                    <br>
+                </div>
+
+                <div class="form-line">
+                    <span class="form-indicator">手机号码</span>
+                        {{ form.Mobile(value=member_for_edit.Mobile, size=80) }}
+
+                        <!--    显示表单验证错误    -->
+                        {% for error in form.Mobile.errors %}
+                            <br>
+                            <span class="form-error">▲ {{ error }}</span>
+                        {% endfor %}
+                    <br>
+                </div>
+
+                <div class="form-line">
+                    <span class="form-indicator">QQ</span>
+                        {{ form.QQ(value=member_for_edit.QQ, size=80) }}
+                    <br>
+                </div>
+
+                <div class="form-line">
+                    <span class="form-indicator">生日</span>
+                        {{ form.Birthday(value=member_for_edit.Birthday, size=80, type='date') }}
+                    <br>
+                </div>
+
+                <div class="form-line">
+                    <span class="form-indicator">年级</span>
+                        {{ form.Grade(value=member_for_edit.Grade, size=80) }}
+
+                        <!--    显示表单验证错误    -->
+                        {% for error in form.Grade.errors %}
+                            <br>
+                            <span class="form-error">▲ {{ error }}</span>
+                        {% endfor %}
+
+                    <br>
+                </div>
+
+                <div class="form-line">
+                    <span class="form-indicator">专业</span>
+                        {{ form.Faculty(value=member_for_edit.Faculty, size=80) }}
+
+                        <!--    显示表单验证错误    -->
+                        {% for error in form.Faculty.errors %}
+                            <br>
+                            <span class="form-error">▲ {{ error }}</span>
+                        {% endfor %}
+                    <br>
+                </div>
+
+                <div class="form-line">
+                    <span class="form-indicator">班级</span>
+                        {{ form.Class(value=member_for_edit.Class, size=80) }}
+                    <br>
+                </div>
+
+                <div class="form-line">
+                    <span class="form-indicator">寝室楼栋</span>
+                        {{ form.DormBuild(value=member_for_edit.DormBuild, size=80) }}
+                    <br>
+                </div>
+
+                <div class="form-line" id="AU-Department-Chooser">
+                    <span class="form-indicator">所在的社联部门</span>
+                        {{ form.Department(value=member_for_edit.Department, size=80) }}
+
+                        <!--    显示表单验证错误    -->
+                        {% for error in form.Department.errors %}
+                            <br>
+                            <span class="form-error">▲ {{ error }}</span>
+                        {% endfor %}
+                    <br>
+                </div>
+
+                <div class="form-line">
+                    <span class="form-indicator">部门内的组别</span>
+                        {{ form.GroupInDepart(value=member_for_edit.GroupInDepart, size=80) }}
+                    <br>
+                </div>
+
+                <div class="form-line">
+                    <span class="form-indicator">社联职务</span>
+                        {{ form.Occupation(value=member_for_edit.Occupation, size=80) }}
+
+                        <!--    显示表单验证错误    -->
+                        {% for error in form.Occupation.errors %}
+                            <br>
+                            <span class="form-error">▲ {{ error }}</span>
+                        {% endfor %}
+                    <br>
+                </div>
+
+                <div class="form-line">
+                    <span class="form-indicator">社联编号</span>
+                        {{ form.AUID(value=member_for_edit.AUID, size=80) }}
+                    <br>
+                </div>
+
+                <div class="form-line">
+                    <span class="form-indicator">加入社联的时间</span>
+                        {{ form.ArrivalTime(value=member_for_edit.ArrivalTime, size=80, type='date') }}
+
+                        <!--    显示表单验证错误    -->
+                        {% for error in form.ArrivalTime.errors %}
+                            <br>
+                            <span class="form-error">▲ {{ error }}</span>
+                        {% endfor %}
+                    <br>
+                </div>
+
+                <div>
+                    <input type="submit" id="form-submit" value="提交更改" >
+                </div>
+            </form>
+    {% else %}
+        <div class="personinfo-container">
+
+            <div class="personinfo-line">
+                <span>姓名</span>
+                {{ result_assembly['Name'] }}
+            </div>
+
+            <div class="personinfo-line">
+                <span>所在部门</span>
+                {{ result_assembly['Department'] }}
+            </div>
+
+            <div class="personinfo-line">
+                <span>部门内分组</span>
+                {{ result_assembly['GroupInDepart'] }}
+            </div>
+
+            <div class="personinfo-line">
+                <span>职务</span>
+                {{ result_assembly['Occupation'] }}
+            </div>
+
+            <div class="personinfo-line">
+                <span>性别</span>
+                {{ result_assembly['Gender'] }}
+            </div>
+
+            <div class="personinfo-line">
+                <span>手机号</span>
+                {{ result_assembly['Mobile'] }}
+            </div>
+
+            <div class="personinfo-line">
+                <span>QQ</span>
+                {{ result_assembly['QQ'] }}
+            </div>
+
+            <div class="personinfo-line">
+                <span>生日</span>
+                {{ result_assembly['Birthday'] }}
+            </div>
+
+            <div class="personinfo-line">
+                <span>年级</span>
+                {{ result_assembly['Grade'] }}
+            </div>
+
+            <div class="personinfo-line">
+                <span>专业</span>
+                {{ result_assembly['Faculty'] }}
+            </div>
+
+            <div class="personinfo-line">
+                <span>班级</span>
+                {{ result_assembly['Class'] }}
+            </div>
+
+            <div class="personinfo-line">
+                <span>寝室楼栋</span>
+                {{ result_assembly['DormBuild'] }}
+            </div>
+
+            <div class="personinfo-line">
+                <span>社联编号</span>
+                {{ result_assembly['AUID'] }}
+            </div>
+
+            <div class="personinfo-line">
+                <span>进入社联的时间</span>
+                {{ result_assembly['ArrivalTime'] }}
+            </div>
+
         </div>
-        
-        <div class="personinfo-line">
-            <span>年级</span>
-            {{ result_assembly['Grade'] }}
-        </div>
-        
-        <div class="personinfo-line">
-            <span>专业</span>
-            {{ result_assembly['Faculty'] }}
-        </div>
-        
-        <div class="personinfo-line">
-            <span>班级</span>
-            {{ result_assembly['Class'] }}
-        </div>
-        
-        <div class="personinfo-line">
-            <span>寝室楼栋</span>
-            {{ result_assembly['DormBuild'] }}
-        </div>
-        
-        <div class="personinfo-line">
-            <span>社联编号</span>
-            {{ result_assembly['AUID'] }}
-        </div>
-        
-        <div class="personinfo-line">
-            <span>进入社联的时间</span>
-            {{ result_assembly['ArrivalTime'] }}
-        </div>
-        
-    </div>
+    {% endif %}
 
 </body>
 </html>

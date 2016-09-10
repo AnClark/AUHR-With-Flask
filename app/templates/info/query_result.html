@@ -3,11 +3,17 @@
 {% block content %}
     <!--    引入弹出窗口控制程序  -->
     <script src="{{ url_for('static', filename='js/popwindow.js') }}"></script>
+
     <script>
         function start_query(){
             //TODO: 后期考虑用AJAX实现结果页内的搜索
             var keyword = document.getElementById("keyword").value;
             location.href="/info/query_result?key=" + keyword;
+        }
+
+        function show_person_info_window(person_id){
+            document.getElementById("person-info").src = "/info/query_person?idx=" + person_id;
+            show_popup_window();
         }
     </script>
 
@@ -38,7 +44,7 @@
         {% else %}
             <div class="result-table">
                 {% for result in result_assembly %}
-                    <div id="member-{{ result['Name'] }}" class="result-table-line" onclick="//TODO:单击后弹窗显示成员信息">
+                    <div id="{{ result['Name'] }}" class="result-table-line" onclick="show_person_info_window('{{ result['id'] }}')">
                             {% for value in result.values() %}
                                 {{ value }}，
                             {% endfor %}
@@ -53,8 +59,13 @@
     <div class="background-shade" id="shader" onclick="hide_popup_window()"></div>
     <div class="popup-window" id="popup-window">
         <div class="popup-window-title">
-            <span>弹出窗口</span>
+            <span>个人信息</span>
             <span class="close-button" onclick="hide_popup_window()">[关闭]</span>
         </div>
+        <div class="popup-window-body">
+            <!--<iframe id="person-info" src="" frameborder="0" height="480" width="640" seamless></iframe>-->
+            <iframe id="person-info" src="" frameborder="0" height="480" width="640"></iframe>
+        </div>
     </div>
+
 {% endblock %}

@@ -209,17 +209,63 @@ def info_query_result():
 #   个人信息报表页面
 #   在查询结果页中以“弹窗内嵌iframe”的形式展示
 #   根据唯一关键字——数据表的唯一ID，来检索成员信息，得到唯一的结果
-@app.route('/info/query_person')
+@app.route('/info/query_person', methods=['GET', 'POST'])
 @login_required
 def info_query_person():
     user = g.user
+    isPremiumUser = session['Premium_User_Switch']
 
-    idx = int(request.args['idx'])
+    #   对于不同的用户，采取不同的策略。
+    if isPremiumUser:   # 如果是高级用户，则直接显示表单，可直接进行编辑。
+        idx = int(request.args['idx'])
+        member_for_edit = Member.query.get(idx)
 
-    result_assembly = MemberQuerierById(idx)[0]
+        # 对于性别显示：要求能根据性别来控制单选按钮的选中效果。
+        gender_checked_param = {'Male': '', 'Female': ''}
+        if member_for_edit.Gender == '男':
+            gender_checked_param['Male'] = 'checked'
+        elif member_for_edit.Gender == '女':
+            gender_checked_param['Female'] = 'checked'
 
-    return render_template('info/query_person.html', user=user, isPremiumUser=session['Premium_User_Switch'],
-                           result_assembly=result_assembly)
+        form = InputBasicInfoForm()
+        if form.validate_on_submit():
+            db.session.delete(member_for_edit)
+            member_for_edit = Member(
+                id=member_for_edit.id,
+                Name=form.Name.data,
+                Gender=form.Gender.data,
+                Mobile=form.Mobile.data,
+                QQ=form.QQ.data,
+                Birthday=form.Birthday.data,
+                Grade=form.Grade.data,
+                Faculty=form.Faculty.data,
+                Class=form.Class.data,
+                DormBuild=form.DormBuild.data,
+                Department=form.Department.data,
+                GroupInDepart=form.GroupInDepart.data,
+                Occupation=form.Occupation.data,
+                AUID=form.AUID.data,
+                ArrivalTime=form.ArrivalTime.data
+            )
+            try:
+                db.session.add(member_for_edit)
+                db.session.commit()
+            except Exception, msg:
+                flash("系统出错：%s" % msg)
+            else:
+                flash("成功修改成员信息：%s" % form.Name.data)
+            return redirect('\index')
+
+        return render_template('info/query_person.html', user=user, isPremiumUser=session['Premium_User_Switch'],
+                               member_for_edit=member_for_edit, form=form,
+                               gender_checked_param=gender_checked_param)
+
+    else:               # 如果是普通用户，则只允许查看；
+        idx = int(request.args['idx'])
+        result_assembly = MemberQuerierById(idx)[0]
+
+        return render_template('info/query_person.html', user=user, isPremiumUser=session['Premium_User_Switch'],
+                               result_assembly=result_assembly)
 
 
 # FOR DEBUG

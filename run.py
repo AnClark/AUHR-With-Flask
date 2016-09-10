@@ -7,3 +7,5 @@ from app import app
 #   Or even a fatal error occurred, you can only see an "Internal Server Error" page without any further detail.
 app.run(debug=True)
 
+#app.run(host='0.0.0.0', port=8080, debug=True)
+
