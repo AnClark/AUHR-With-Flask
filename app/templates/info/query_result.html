@@ -49,7 +49,9 @@
 
             {% if result_assembly == False %}
                 <tr class="result-not-found-error-line">
-                    <td style="font-size: 60px">未查询到关键字：{{ keyword }}</td>
+                    <td style="font-size: 60px" colspan="6">
+                        未查询到关键字：{{ keyword }}
+                    </td>
                 </tr>
 
             {% else %}
@@ -79,7 +81,6 @@
 
         </table>
 
-        <!--    打印出检索到的成员信息     -->
 
 
     </div>

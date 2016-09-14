@@ -199,14 +199,11 @@ def info_query():
 def info_query_result():
     user = g.user
 
-    isPremiumUser = session['Premium_User_Switch']
-
-
     keyword = request.args['key']
     result_assembly = MemberQuerier(keyword=keyword)
 
     return render_template('info/query_result.html', user=user, isPremiumUser=session['Premium_User_Switch'],
-                           result_assembly=result_assembly)
+                           result_assembly=result_assembly, keyword=keyword)
 
 
 #   个人信息报表页面
