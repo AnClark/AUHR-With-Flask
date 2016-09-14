@@ -13,6 +13,32 @@
 
         function show_person_info_window(person_id){
             //document.getElementById("person-info").src = "/info/query_person?idx=" + person_id;
+            var idx_for_query={};
+            idx_for_query['idx']=person_id;
+
+            $.ajax({
+                type: 'POST',
+                url: '/info/query_person',
+                data: idx_for_query,
+                dataType: 'json',
+                success: function(data){
+                    $('#Name').val(data.result['Name']);
+
+
+                    /** 对性别的单独处理 **/
+                    switch(data.result['Gender']){
+                        case("男"):
+                            document.getElementById("Gender-Male").checked = "checked";
+                            break;
+                        case("女"):
+                            document.getElementById("Gender-Female").checked = "checked";
+                            break;
+                    }
+                },
+                error: function (xhr, type) {
+
+                }
+            });
             show_popup_window();
         }
     </script>
