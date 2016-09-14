@@ -12,7 +12,7 @@
         }
 
         function show_person_info_window(person_id){
-            document.getElementById("person-info").src = "/info/query_person?idx=" + person_id;
+            //document.getElementById("person-info").src = "/info/query_person?idx=" + person_id;
             show_popup_window();
         }
     </script>
@@ -37,21 +37,50 @@
 
     <div class="result-container">
         <!--    TODO:打印表头    -->
+        <table id="result-table" class="result-table" border="1">
+            <tr class="result-table-header">
+                <th>姓名</th>
+                <th>年级</th>
+                <th>所在部门</th>
+                <th>职务</th>
+                <th>手机</th>
+                <th>QQ</th>
+            </tr>
+
+            {% if result_assembly == False %}
+                <tr class="result-not-found-error-line">
+                    <td style="font-size: 60px">未查询到关键字：{{ keyword }}</td>
+                </tr>
+
+            {% else %}
+                    {% for result in result_assembly %}
+                            <tr id="{{ result['Name'] }}" class="result-table-line" onclick="show_person_info_window('{{ result['id'] }}')">
+                                    <td id="result-Name">
+                                        {{ result['Name'] }}
+                                    </td>
+                                    <td id="result-Grade">
+                                        {{ result['Grade'] }}
+                                    </td>
+                                    <td id="result-Department">
+                                        {{ result['Department'] }}
+                                    </td>
+                                    <td id="result-Occupation">
+                                        {{ result['Occupation'] }}
+                                    </td>
+                                    <td id="result-Mobile">
+                                        {{ result['Mobile'] }}
+                                    </td>
+                                    <td id="result-QQ">
+                                        {{ result['QQ'] }}
+                                    </td>
+                            </tr>
+                    {% endfor %}
+            {% endif %}
+
+        </table>
 
         <!--    打印出检索到的成员信息     -->
-        {% if result_assembly == False %}
-            <h2>未查询到关键字：{{ keyword }}</h2>
-        {% else %}
-            <div class="result-table">
-                {% for result in result_assembly %}
-                    <div id="{{ result['Name'] }}" class="result-table-line" onclick="show_person_info_window('{{ result['id'] }}')">
-                            {% for value in result.values() %}
-                                {{ value }}，
-                            {% endfor %}
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
+
 
     </div>
 
@@ -63,8 +92,78 @@
             <span class="close-button" onclick="hide_popup_window()">[关闭]</span>
         </div>
         <div class="popup-window-body">
-            <!--<iframe id="person-info" src="" frameborder="0" height="480" width="640" seamless></iframe>-->
-            <iframe id="person-info" src="" frameborder="0" height="480" width="640"></iframe>
+
+            {% if isPremiumUser == True %}
+                    <form id="modify-person-info" name="modify-person-info">
+                        <span>姓名</span>
+                            <input type="text" name="Name" id="Name">
+                        <span>性别</span>
+                            <input type="radio" name="Gender" id="Gender-Male">男
+                            <input type="radio" name="Gender" id="Gender-Female">女
+                        <span>手机</span>
+
+                    </form>
+            {% else %}
+                        <div class="personinfo-container">
+                                <div class="personinfo-line">
+                                    <span>姓名</span>
+                                    {{ result_assembly['Name'] }}
+                                </div>
+                                <div class="personinfo-line">
+                                    <span>所在部门</span>
+                                    {{ result_assembly['Department'] }}
+                                </div>
+                                <div class="personinfo-line">
+                                    <span>部门内分组</span>
+                                    {{ result_assembly['GroupInDepart'] }}
+                                </div>
+                                <div class="personinfo-line">
+                                    <span>职务</span>
+                                    {{ result_assembly['Occupation'] }}
+                                </div>
+                                <div class="personinfo-line">
+                                    <span>性别</span>
+                                    {{ result_assembly['Gender'] }}
+                                </div>
+                                <div class="personinfo-line">
+                                    <span>手机号</span>
+                                    {{ result_assembly['Mobile'] }}
+                                </div>
+                                <div class="personinfo-line">
+                                    <span>QQ</span>
+                                    {{ result_assembly['QQ'] }}
+                                </div>
+                                <div class="personinfo-line">
+                                    <span>生日</span>
+                                    {{ result_assembly['Birthday'] }}
+                                </div>
+                                <div class="personinfo-line">
+                                    <span>年级</span>
+                                    {{ result_assembly['Grade'] }}
+                                </div>
+                                <div class="personinfo-line">
+                                    <span>专业</span>
+                                    {{ result_assembly['Faculty'] }}
+                                </div>
+                                <div class="personinfo-line">
+                                    <span>班级</span>
+                                    {{ result_assembly['Class'] }}
+                                </div>
+                                <div class="personinfo-line">
+                                    <span>寝室楼栋</span>
+                                    {{ result_assembly['DormBuild'] }}
+                                </div>
+                                <div class="personinfo-line">
+                                    <span>社联编号</span>
+                                    {{ result_assembly['AUID'] }}
+                                </div>
+                                <div class="personinfo-line">
+                                    <span>进入社联的时间</span>
+                                    {{ result_assembly['ArrivalTime'] }}
+                                </div>
+                    </div>
+            {% endif %}
+
         </div>
     </div>
 

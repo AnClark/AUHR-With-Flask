@@ -199,6 +199,9 @@ def info_query():
 def info_query_result():
     user = g.user
 
+    isPremiumUser = session['Premium_User_Switch']
+
+
     keyword = request.args['key']
     result_assembly = MemberQuerier(keyword=keyword)
 
