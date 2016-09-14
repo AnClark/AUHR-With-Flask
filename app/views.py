@@ -194,12 +194,13 @@ def info_query():
 #   查询结果显示在这里。
 #   点击条目，即可以以页面内弹窗的形式，展示单人信息报表
 #   在页面内，还可以再以关键字和部门分类进行查询
-@app.route('/info/query_result')
+@app.route('/info/query_result', methods=['GET'])
 @login_required
 def info_query_result():
     user = g.user
 
     keyword = request.args['key']
+
     result_assembly = MemberQuerier(keyword=keyword)
 
     return render_template('info/query_result.html', user=user, isPremiumUser=session['Premium_User_Switch'],

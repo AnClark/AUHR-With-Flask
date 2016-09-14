@@ -95,14 +95,39 @@
         <div class="popup-window-body">
 
             {% if isPremiumUser == True %}
-                    <form id="modify-person-info" name="modify-person-info">
+                    <form id="modify-person-info" name="modify-person-info" action="" method="post">
                         <span>姓名</span>
-                            <input type="text" name="Name" id="Name">
+                            <input type="text" name="Name" id="Name"> <br>
                         <span>性别</span>
                             <input type="radio" name="Gender" id="Gender-Male">男
                             <input type="radio" name="Gender" id="Gender-Female">女
+                            <br>
                         <span>手机</span>
+                            <input type="text" name="Mobile" id="Mobile"><br>
+                        <span>QQ</span>
+                            <input type="text" name="QQ" id="QQ"><br>
+                        <span>生日</span>
+                            <input type="date" name="Birthday" id="Birthday"><br>
+                        <span>年级</span>
+                            <input type="text" name="Grade" id="Grade"><br>
+                        <span>院系</span>
+                            <input type="text" name="Faculty" id="Faculty"><br>
+                        <span>班级</span>
+                            <input type="text" name="Class" id="Class"><br>
+                        <span>寝室楼栋</span>
+                            <input type="text" name="DormBuild" id="DormBuild"><br>
+                        <span>所在社联部门</span>
+                            <input type="text" name="Department" id="Department"><br>
+                        <span>部门内分组</span>
+                            <input type="text" name="GroupInDepart" id="GroupInDepart"><br>
+                        <span>职务</span>
+                            <input type="text" name="Occupation" id="Occupation"><br>
+                        <span>社联编号</span>
+                            <input type="text" name="AUID" id="AUID"><br>
+                        <span>加入社联的时间</span>
+                            <input type="date" name="ArrivalTime" id="ArrivalTime"><br>
 
+                        <input type="submit" id="submit-form" value="提交更改">
                     </form>
             {% else %}
                         <div class="personinfo-container">
