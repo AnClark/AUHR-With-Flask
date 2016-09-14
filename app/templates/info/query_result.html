@@ -23,7 +23,12 @@
                 dataType: 'json',
                 success: function(data){
                     $('#Name').val(data.result['Name']);
+                    $('#Mobile').val(data.result['Mobile']);
+                    $('#QQ').val(data.result['QQ']);
+                    $('#Birthday').attr("value", UTC2StandardFormat(data.result['Birthday']));
 
+
+                    alert(UTC2StandardFormat(data.result['Birthday']));
 
                     /** 对性别的单独处理 **/
                     switch(data.result['Gender']){
