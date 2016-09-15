@@ -27,6 +27,7 @@
                      *  ■普通用户：操作的是不可写的标签
                      **/
                     {% if isPremiumUser == True %}
+                            $('#idx').val(data.result['id'])
                             $('#Name').val(data.result['Name']);
                             $('#Mobile').val(data.result['Mobile']);
                             $('#QQ').val(data.result['QQ']);
@@ -83,8 +84,48 @@
             });
 
         }
-    </script>
 
+    </script>
+    <script>
+            function submit_modify_person_info(person_id){
+                var modified_person_info={};
+                    modified_person_info['idx']=person_id;
+                    modified_person_info['Name']=$('#Name').val();
+                    modified_person_info['Gender']=$('#Gender').val();
+                    modified_person_info['Mobile']=$('#Mobile').val();
+                    modified_person_info['QQ']=$('#QQ').val();
+                    modified_person_info['Birthday']=$('#Birthday').val();
+                    modified_person_info['Grade']=$('#Grade').val();
+                    modified_person_info['Faculty']=$('#Faculty').val();
+                    modified_person_info['Class']=$('#Class').val();
+                    modified_person_info['DormBuild']=$('#DormBuild').val();
+                    modified_person_info['Department']=$('#Department').val();
+                    modified_person_info['GroupInDepart']=$('#GroupInDepart').val();
+                    modified_person_info['Occupation']=$('#Occupation').val();
+                    modified_person_info['AUID']=$('#AUID').val();
+                    modified_person_info['ArrivalTime']=$('#ArrivalTime').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/info/submit_modified_person',
+                    data: modified_person_info,
+                    dataType: 'json',
+                    success: function(data){
+                        if(data.result['OK'] == true){
+                            alert("个人信息修改成功！\n 目标成员：" + data.result['changed_who']);
+                        }
+                        else{
+                            alert("修改失败，个人信息维持原样。。。\n 错误信息：" + data.result['errmsg']);
+                        }
+                        hide_popup_window();
+                    },
+                    error: function(xhr, type){
+                        alert("系统异常。。。个人信息修改出错！");
+                        hide_popup_window();
+                    }
+                })
+        }
+    </script>
 
     <!--  TODO:前置工具栏  -->
     <div class="query-header">
@@ -164,6 +205,7 @@
 
             {% if isPremiumUser == True %}
                     <form id="modify-person-info" name="modify-person-info" action="" method="post">
+                        <input type="text" name="idx" id="idx" hidden>
                         <span>姓名</span>
                             <input type="text" name="Name" id="Name"> <br>
                         <span>性别</span>
@@ -195,7 +237,7 @@
                         <span>加入社联的时间</span>
                             <input type="date" name="ArrivalTime" id="ArrivalTime"><br>
 
-                        <input type="submit" id="submit-form" value="提交更改">
+                        <input type="button" id="submit-form" value="提交更改" onclick="submit_modify_person_info($('#idx').val())">
                     </form>
             {% else %}
                         <table class="personinfo-container">

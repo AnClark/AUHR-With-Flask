@@ -6,6 +6,7 @@ from flask import flash
 
 from .models import Member, Admin
 from .querier import MemberQuerier, MemberQuerierById, department_list
+from .datestr_to_dateobject import date_string_to_date_object
 
 from .forms import LoginForm, InputBasicInfoForm, KeyWordQueryForm
 
@@ -212,6 +213,48 @@ def info_query_person():
     idx = int(request.form.get('idx', 0))
     result = MemberQuerierById(idx)[0]
     return jsonify(result=result)
+
+
+@app.route('/info/submit_modified_person', methods=['GET', 'POST'])
+@login_required
+def info_submit_modified_person():
+    idx = int(request.form.get('idx', 0))
+
+    member_for_edit = Member.query.get(idx)
+
+    db.session.delete(member_for_edit)
+
+    print(request.form.get('Birthday'))
+    print(request.form.get('ArrivalTime'))
+
+    member_for_edit = Member(
+        id=member_for_edit.id,
+        Name=request.form.get('Name', ''),
+        Gender=request.form.get('Gender', ''),
+        Mobile=request.form.get('Mobile', ''),
+        QQ=request.form.get('QQ', ''),
+        Grade=request.form.get('Grade', ''),
+        Faculty=request.form.get('Faculty', ''),
+        Class=request.form.get('Class', ''),
+        DormBuild=request.form.get('DormBuild', ''),
+        Department=request.form.get('Department', ''),
+        GroupInDepart=request.form.get('GroupInDepart', ''),
+        Occupation=request.form.get('Occupation', ''),
+        AUID=request.form.get('AUID', ''),
+
+        #  日期单独进行处理
+        Birthday=date_string_to_date_object(request.form.get('Birthday')),
+        ArrivalTime=date_string_to_date_object(request.form.get('ArrivalTime')),
+    )
+    try:
+        db.session.add(member_for_edit)
+        db.session.commit()
+    except Exception, msg:
+        return jsonify(result={'OK': False, 'errmsg': msg})
+    else:
+        return jsonify(result={'OK': True, 'changed_who': request.form.get('Name', '')})
+
+
 
 
 # FOR DEBUG
