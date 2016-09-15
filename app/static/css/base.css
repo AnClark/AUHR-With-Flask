@@ -1,0 +1,70 @@
+body
+{
+    font-family: 'Microsoft YaHei UI','微软雅黑','Arial';
+}
+
+/**	优化链接下划线 **/
+a:link,a:visited{ text-decoration:none; /*超链接无下划线*/ } 
+a:hover{ text-decoration:underline; /*鼠标放上去有下划线*/ }
+
+/**	去除系统默认的边缘，旨在防止元素周围留白，影响观感	**/
+*
+{
+	padding: 0px;
+	margin: 0px;
+}
+
+/**	使列表横排	**/
+ul{list-style: none;}
+li{ float: left;}
+		
+.head
+{
+	position: relative;
+}
+
+.top-bar
+{
+	width: 100%;
+	height: 55px;
+	clear: both;
+	background-color: rgb(116, 159, 77);
+}
+
+.top-bar a{
+	color: white;
+}
+
+.title-logo
+{
+	font-size: 25px;
+	padding-top: 10px;
+	padding-left: 20px;
+	float:left;
+}
+
+.title-info
+{
+	position: relative;
+	padding-top: 15px;
+	padding-right: 30px;
+	float: right;
+}
+
+.title-info li
+{
+	padding-left: 20px;
+	padding-right: 20px;
+	
+	border-right: 1px solid;
+	border-color: gray;
+	margin-right: -1px;
+}
+
+.flash-message
+{
+    padding:10px 10px 10px 10px;
+	width: 100%;
+	height:30px;
+	background-color: #408EAD;
+}
