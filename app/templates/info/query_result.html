@@ -14,38 +14,62 @@
         function show_person_info_window(person_id){
             var idx_for_query={};
             idx_for_query['idx']=person_id;
-
+            
             $.ajax({
                 type: 'POST',
                 url: '/info/query_person',
                 data: idx_for_query,
                 dataType: 'json',
                 success: function(data){
-                    $('#Name').val(data.result['Name']);
-                    $('#Mobile').val(data.result['Mobile']);
-                    $('#QQ').val(data.result['QQ']);
-                    $('#Grade').val(data.result['Grade']);
-                    $('#Faculty').val(data.result['Faculty']);
-                    $('#Class').val(data.result['Class']);
-                    $('#DormBuild').val(data.result['DormBuild']);
-                    $('#Department').val(data.result['Department']);
-                    $('#GroupInDepart').val(data.result['GroupInDepart']);
-                    $('#Occupation').val(data.result['Occupation']);
-                    $('#AUID').val(data.result['AUID']);
+                    /** 
+                     * 对不同的用户，采用不同的加载策略
+                     *  ■高级用户：操作的是表单
+                     *  ■普通用户：操作的是不可写的标签
+                     **/
+                    {% if isPremiumUser == True %}
+                            $('#Name').val(data.result['Name']);
+                            $('#Mobile').val(data.result['Mobile']);
+                            $('#QQ').val(data.result['QQ']);
+                            $('#Grade').val(data.result['Grade']);
+                            $('#Faculty').val(data.result['Faculty']);
+                            $('#Class').val(data.result['Class']);
+                            $('#DormBuild').val(data.result['DormBuild']);
+                            $('#Department').val(data.result['Department']);
+                            $('#GroupInDepart').val(data.result['GroupInDepart']);
+                            $('#Occupation').val(data.result['Occupation']);
+                            $('#AUID').val(data.result['AUID']);
+        
+                            /** 对日期的单独处理 **/
+                            $('#Birthday').attr("value", UTC2StandardFormat(data.result['Birthday']));
+                            $('#ArrivalTime').attr("value", UTC2StandardFormat(data.result['ArrivalTime']));
+        
+                            /** 对性别的单独处理 **/
+                            switch(data.result['Gender']){
+                                case("男"):
+                                    document.getElementById("Gender-Male").checked = "checked";
+                                    break;
+                                case("女"):
+                                    document.getElementById("Gender-Female").checked = "checked";
+                                    break;
+                            }
+                    {% else %}
+                            $('#Name-readonly').html(data.result['Name']);
+                            $('#Gender-readonly').html(data.result['Gender']);
+                            $('#Mobile-readonly').html(data.result['Mobile']);
+                            $('#QQ-readonly').html(data.result['QQ']);
+                            $('#Grade-readonly').html(data.result['Grade']);
+                            $('#Faculty-readonly').html(data.result['Faculty']);
+                            $('#Class-readonly').html(data.result['Class']);
+                            $('#DormBuild-readonly').html(data.result['DormBuild']);
+                            $('#Department-readonly').html(data.result['Department']);
+                            $('#GroupInDepart-readonly').html(data.result['GroupInDepart']);
+                            $('#Occupation-readonly').html(data.result['Occupation']);
+                            $('#AUID-readonly').html(data.result['AUID']);
 
-                    /** 对日期的单独处理 **/
-                    $('#Birthday').attr("value", UTC2StandardFormat(data.result['Birthday']));
-                    $('#ArrivalTime').attr("value", UTC2StandardFormat(data.result['ArrivalTime']));
-
-                    /** 对性别的单独处理 **/
-                    switch(data.result['Gender']){
-                        case("男"):
-                            document.getElementById("Gender-Male").checked = "checked";
-                            break;
-                        case("女"):
-                            document.getElementById("Gender-Female").checked = "checked";
-                            break;
-                    }
+                            /** 对日期的单独处理 **/
+                            $('#Birthday-readonly').html(UTC2StandardFormat(data.result['Birthday']));
+                            $('#ArrivalTime-readonly').html(UTC2StandardFormat(data.result['ArrivalTime']));
+                    {% endif %}
 
                     /**
                      * 所有信息从后台读取并显示完毕后，方打开个人信息窗口
@@ -174,64 +198,64 @@
                         <input type="submit" id="submit-form" value="提交更改">
                     </form>
             {% else %}
-                        <div class="personinfo-container">
-                                <div class="personinfo-line">
-                                    <span>姓名</span>
-                                    {{ result_assembly['Name'] }}
-                                </div>
-                                <div class="personinfo-line">
-                                    <span>所在部门</span>
-                                    {{ result_assembly['Department'] }}
-                                </div>
-                                <div class="personinfo-line">
-                                    <span>部门内分组</span>
-                                    {{ result_assembly['GroupInDepart'] }}
-                                </div>
-                                <div class="personinfo-line">
-                                    <span>职务</span>
-                                    {{ result_assembly['Occupation'] }}
-                                </div>
-                                <div class="personinfo-line">
-                                    <span>性别</span>
-                                    {{ result_assembly['Gender'] }}
-                                </div>
-                                <div class="personinfo-line">
-                                    <span>手机号</span>
-                                    {{ result_assembly['Mobile'] }}
-                                </div>
-                                <div class="personinfo-line">
-                                    <span>QQ</span>
-                                    {{ result_assembly['QQ'] }}
-                                </div>
-                                <div class="personinfo-line">
-                                    <span>生日</span>
-                                    {{ result_assembly['Birthday'] }}
-                                </div>
-                                <div class="personinfo-line">
-                                    <span>年级</span>
-                                    {{ result_assembly['Grade'] }}
-                                </div>
-                                <div class="personinfo-line">
-                                    <span>专业</span>
-                                    {{ result_assembly['Faculty'] }}
-                                </div>
-                                <div class="personinfo-line">
-                                    <span>班级</span>
-                                    {{ result_assembly['Class'] }}
-                                </div>
-                                <div class="personinfo-line">
-                                    <span>寝室楼栋</span>
-                                    {{ result_assembly['DormBuild'] }}
-                                </div>
-                                <div class="personinfo-line">
-                                    <span>社联编号</span>
-                                    {{ result_assembly['AUID'] }}
-                                </div>
-                                <div class="personinfo-line">
-                                    <span>进入社联的时间</span>
-                                    {{ result_assembly['ArrivalTime'] }}
-                                </div>
-                    </div>
+                        <table class="personinfo-container">
+                                <tr class="personinfo-line">
+                                    <td>姓名</td>
+                                    <td id="Name-readonly"></td>
+                                </tr>
+                                <tr class="personinfo-line">
+                                    <td>所在部门</td>
+                                    <td id="Department-readonly"></td>
+                                </tr>
+                                <tr class="personinfo-line">
+                                    <td>部门内分组</td>
+                                    <td id="GroupInDepart-readonly"></td>
+                                </tr>
+                                <tr class="personinfo-line">
+                                    <td>职务</td>
+                                    <td id="Occupation-readonly"></td>
+                                </tr>
+                                <tr class="personinfo-line">
+                                    <td>性别</td>
+                                    <td id="Gender-readonly"></td>
+                                </tr>
+                                <tr class="personinfo-line">
+                                    <td>手机号</td>
+                                    <td id="Mobile-readonly"></td>
+                                </tr>
+                                <tr class="personinfo-line">
+                                    <td>QQ</td>
+                                    <td id="QQ-readonly"></td>
+                                </tr>
+                                <tr class="personinfo-line">
+                                    <td>生日</td>
+                                    <td id="Birthday-readonly"></td>
+                                </tr>
+                                <tr class="personinfo-line">
+                                    <td>年级</td>
+                                    <td id="Grade-readonly"></td>
+                                </tr>
+                                <tr class="personinfo-line">
+                                    <td>专业</td>
+                                    <td id="Faculty-readonly"></td>
+                                </tr>
+                                <tr class="personinfo-line">
+                                    <td>班级</td>
+                                    <td id="Class-readonly"></td>
+                                </tr>
+                                <tr class="personinfo-line">
+                                    <td>寝室楼栋</td>
+                                    <td id="DormBuild-readonly"></td>
+                                </tr>
+                                <tr class="personinfo-line">
+                                    <td>社联编号</td>
+                                    <td id="AUID-readonly"></td>
+                                </tr>
+                                <tr class="personinfo-line">
+                                    <td>进入社联的时间</td>
+                                    <td id="ArrivalTime-readonly"></td>
+                                </tr>
+                    </table>
             {% endif %}
 
         </div>
