@@ -118,6 +118,10 @@
                             alert("修改失败，个人信息维持原样。。。\n 错误信息：" + data.result['errmsg']);
                         }
                         hide_popup_window();
+
+                        /** 刷新页面，使得我们能看到更改 **/
+                        location.href = document.URL;
+
                     },
                     error: function(xhr, type){
                         alert("系统异常。。。个人信息修改出错！");
