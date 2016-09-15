@@ -12,7 +12,6 @@
         }
 
         function show_person_info_window(person_id){
-            //document.getElementById("person-info").src = "/info/query_person?idx=" + person_id;
             var idx_for_query={};
             idx_for_query['idx']=person_id;
 
@@ -25,10 +24,18 @@
                     $('#Name').val(data.result['Name']);
                     $('#Mobile').val(data.result['Mobile']);
                     $('#QQ').val(data.result['QQ']);
+                    $('#Grade').val(data.result['Grade']);
+                    $('#Faculty').val(data.result['Faculty']);
+                    $('#Class').val(data.result['Class']);
+                    $('#DormBuild').val(data.result['DormBuild']);
+                    $('#Department').val(data.result['Department']);
+                    $('#GroupInDepart').val(data.result['GroupInDepart']);
+                    $('#Occupation').val(data.result['Occupation']);
+                    $('#AUID').val(data.result['AUID']);
+
+                    /** 对日期的单独处理 **/
                     $('#Birthday').attr("value", UTC2StandardFormat(data.result['Birthday']));
-
-
-                    alert(UTC2StandardFormat(data.result['Birthday']));
+                    $('#ArrivalTime').attr("value", UTC2StandardFormat(data.result['ArrivalTime']));
 
                     /** 对性别的单独处理 **/
                     switch(data.result['Gender']){
@@ -39,12 +46,18 @@
                             document.getElementById("Gender-Female").checked = "checked";
                             break;
                     }
+
+                    /**
+                     * 所有信息从后台读取并显示完毕后，方打开个人信息窗口
+                     * 如此即可避免在打开窗口的那一瞬间出现信息显示延迟
+                     **/
+                    show_popup_window();
                 },
                 error: function (xhr, type) {
-
+                    alert("无法获取成员信息，请稍后再试！")
                 }
             });
-            show_popup_window();
+
         }
     </script>
 

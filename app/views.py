@@ -44,8 +44,10 @@ def load_user(id):
 @app.route('/index')
 def index():
         if string.find(str(current_user), "Anonymous") > 0:
+            print("***	Not login. Time to login now!")
             return redirect(url_for('login'))
         else:
+            print("***	Logined with user: " + current_user.username)
             return redirect(url_for('info'))
 
 
@@ -198,11 +200,8 @@ def info_query():
 @login_required
 def info_query_result():
     user = g.user
-
     keyword = request.args['key']
-
     result_assembly = MemberQuerier(keyword=keyword)
-
     return render_template('info/query_result.html', user=user, isPremiumUser=session['Premium_User_Switch'],
                            result_assembly=result_assembly, keyword=keyword)
 
