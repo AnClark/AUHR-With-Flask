@@ -87,13 +87,17 @@ def login():
 
         password_char = db.session.query(models.Admin.password).filter_by(username=str(input_username)).all()[0]
         password_char = str(password_char[0])
-        #if(sha256_crypt.verify(input_password, password_char)):
+        password_verify_passed = False
 
-        if input_password == password_char:
+        try:
+            password_verify_passed = sha256_crypt.verify(input_password, password_char)
+        except ValueError:
+            flash("系统错误：数据库中的密码未加密！")
+
+        if password_verify_passed:
             pass
         else:
             form.password.errors.append("密码错误！")
-            # flash("Queried password is: %s \n Your inputed password is: %s" % (password_char, input_password))
             return render_template('login/login.html', form=form)
 
         #   检测用户级别
